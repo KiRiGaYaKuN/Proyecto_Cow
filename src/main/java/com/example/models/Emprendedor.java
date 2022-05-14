@@ -22,14 +22,7 @@ import javax.persistence.TemporalType;
 
 //nombre, correo electrónico, cédula
 @Entity
-public class Emprendedor implements Serializable{
-    
-    private static final long serialVersionUID = 1L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
+public class Emprendedor {
     
      private String nombre;
     
