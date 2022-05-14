@@ -30,7 +30,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
- * @author Mauricio
+ * @author 
  */
 @Path("/competitors")
 @Produces(MediaType.APPLICATION_JSON)
