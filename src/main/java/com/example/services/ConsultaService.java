@@ -5,6 +5,8 @@
 package com.example.services;
 
 import com.example.PersistenceManager;
+import com.example.models.Emprendedor;
+import com.example.models.EmprendedorDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +30,7 @@ import org.codehaus.jettison.json.JSONObject;
 @Produces(MediaType.APPLICATION_JSON)
 public class ConsultaService {
     
-    @PersistenceContext(unitName = "CompetitorsPU")
+    @PersistenceContext(unitName = "Crow")
      EntityManager entityManager;
 
     @PostConstruct
@@ -40,5 +42,32 @@ public class ConsultaService {
         }
     }
     
-    
+    @POST
+    @Path("/add")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createEmprendedor(EmprendedorDTO emprendedor) {
+        JSONObject rta = new JSONObject();
+        Emprendedor emprendedorTmp = new Emprendedor();
+        emprendedorTmp.setClave(emprendedor.getClave());
+        emprendedorTmp.setCedula(emprendedor.getCedula());
+        emprendedorTmp.setCorreo(emprendedor.getCorreo());
+        emprendedorTmp.setNombre(emprendedor.getNombre());
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(emprendedorTmp);
+            entityManager.getTransaction().commit();
+            entityManager.refresh(emprendedorTmp);
+            rta.put("competitor_id", emprendedorTmp.getId());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        emprendedorTmp = null;
+        } finally {
+            entityManager.clear();
+            entityManager.close();
+        }
+        return Response.status(200).header("Access-Control-Allow-Origin","*").entity(rta).build();
+ }
 }

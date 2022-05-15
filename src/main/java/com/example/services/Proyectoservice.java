@@ -28,7 +28,7 @@ import org.codehaus.jettison.json.JSONObject;
 @Produces(MediaType.APPLICATION_JSON)
 public class Proyectoservice {
     
-    @PersistenceContext(unitName = "CompetitorsPU")
+    @PersistenceContext(unitName = "Crow")
      EntityManager entityManager;
 
     @PostConstruct
