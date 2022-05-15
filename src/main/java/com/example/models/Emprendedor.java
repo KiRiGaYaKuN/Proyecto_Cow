@@ -39,6 +39,9 @@ public class Emprendedor implements Serializable{
     
     private String clave;
 
+    public Emprendedor() {
+    }
+
     public Emprendedor(String nombre, String correo, int cedula, String clave) {
         this.nombre = nombre;
         this.correo = correo;

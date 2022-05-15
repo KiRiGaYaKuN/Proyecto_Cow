@@ -4,12 +4,32 @@
  */
 package com.example.models;
 
-/**
- *nombre, correo electrónico, cédula, tipo proyecto.
- * @author cristian-patino
- */
+import com.sun.istack.NotNull;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Set;
+import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-public class Donante {
+
+@Entity
+public class Donante implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     private String nombre;
     
     private String correo;
@@ -19,6 +39,9 @@ public class Donante {
     private String tipoProyecto;
     
     private String clave;
+
+    public Donante() {
+    }
 
     public Donante(String nombre, String correo, int cedula, String tipoProyecto, String clave) {
         this.nombre = nombre;

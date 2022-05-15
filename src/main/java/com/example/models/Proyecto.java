@@ -35,7 +35,9 @@ public class Proyecto implements Serializable{
     @Temporal(TemporalType.DATE)
     private Calendar iniciodate;
        
-    
+    @NotNull
+    @Column(name = "finaldate", updatable = false)
+    @Temporal(TemporalType.DATE)
     private Calendar finaldate;
     
     private String nombre;    
@@ -49,7 +51,7 @@ public class Proyecto implements Serializable{
 
     @PrePersist
     private void creationTimestamp() {
-    this.iniciodate = Calendar.getInstance();
+    this.finaldate = Calendar.getInstance();
     }
 
     public Long getId() {
