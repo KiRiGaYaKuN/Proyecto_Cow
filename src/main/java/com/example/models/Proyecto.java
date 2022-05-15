@@ -42,7 +42,7 @@ public class Proyecto implements Serializable{
     
     private String descripcion;
     
-    private String responsable;
+    private Long responsable;
 
     public Proyecto() {
     }
@@ -84,11 +84,11 @@ public class Proyecto implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public String getResponsable() {
+    public Long getResponsable() {
         return responsable;
     }
 
-    public void setResponsable(String responsable) {
+    public void setResponsable(Long responsable) {
         this.responsable = responsable;
     }
     
