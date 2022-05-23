@@ -19,9 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -119,7 +121,7 @@ public class ConsultaService {
     @GET
     @Path("/donador/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(@PathParam("id") Long id){
+    public Response verdonante(@PathParam("id") Long id){
 //        Query q = entityManager.createQuery("select u from Emprendedor u order by u.nombre ASC");
 //        List<Emprendedor> emprendedor = q.getResultList();
         TypedQuery<Donante>query =(TypedQuery<Donante>)
@@ -128,24 +130,28 @@ public class ConsultaService {
         return Response.status(200).header("Access-Control-Allow-Origin","*").entity(donante).build();
     }
     
-    @POST
-    @Path("/actualizaempre")
+    @PUT
+    @Path("/actualizaempre/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response actualEmprendedor(EmprendedorDTO emprendedor) 
+    public Response actualEmprendedor(@PathParam("id") Long id,EmprendedorDTO emprendedor) 
     
-    {
+    {              
+            
         JSONObject rta = new JSONObject();
-        Emprendedor emprendedorTmp = new Emprendedor();
+        Emprendedor emprendedorTmp = entityManager.find(Emprendedor.class, id);
+        
         emprendedorTmp.setClave(emprendedor.getClave());
-        emprendedorTmp.setCedula(emprendedor.getCedula());
         emprendedorTmp.setCorreo(emprendedor.getCorreo());
-        emprendedorTmp.setNombre(emprendedor.getNombre());
+        System.out.println(emprendedorTmp.getCorreo());
         try {
             entityManager.getTransaction().begin();
+            entityManager.merge(emprendedorTmp);
             entityManager.persist(emprendedorTmp);
             entityManager.getTransaction().commit();
             entityManager.refresh(emprendedorTmp);
-            rta.put("emprendedor_id", emprendedorTmp.getId());
+            rta.put("emprendedor_correo", emprendedorTmp.getCorreo());
+            rta.put("emprendedor_clave", emprendedorTmp.getClave());
         } catch (Throwable t) {
             t.printStackTrace();
             if (entityManager.getTransaction().isActive()) {
@@ -158,4 +164,39 @@ public class ConsultaService {
         }
         return Response.status(200).header("Access-Control-Allow-Origin","*").entity(rta).build();
  }
+    
+    @PUT
+    @Path("/actualizadona/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response actualDonador(@PathParam("id") Long id,DonanteDTO donador) 
+    {        
+        JSONObject rta = new JSONObject();
+        Donante donadorTmp = entityManager.find(Donante.class, id);
+        donadorTmp.setClave(donador.getClave());
+        donadorTmp.setCorreo(donador.getCorreo());
+        donadorTmp.setTipoProyecto(donador.getTipoProyecto());
+        System.out.println(donadorTmp.getCorreo());
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.merge(donadorTmp);
+            entityManager.persist(donadorTmp);
+            entityManager.getTransaction().commit();
+            entityManager.refresh(donadorTmp);
+            rta.put("donador_correo", donadorTmp.getCorreo());
+            rta.put("donador_clave", donadorTmp.getClave());
+            rta.put("tipo_proyecto", donadorTmp.getTipoProyecto());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        donadorTmp = null;
+        } finally {
+            entityManager.clear();
+            entityManager.close();
+        }
+        return Response.status(200).header("Access-Control-Allow-Origin","*").entity(rta).build();
+ }
+    
 }
