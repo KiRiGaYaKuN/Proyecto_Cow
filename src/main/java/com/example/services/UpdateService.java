@@ -8,6 +8,8 @@ import com.example.models.Donante;
 import com.example.models.DonanteDTO;
 import com.example.models.Emprendedor;
 import com.example.models.EmprendedorDTO;
+import com.example.models.Proyecto;
+import com.example.models.ProyectoDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -108,6 +110,40 @@ public class UpdateService {
                 entityManager.getTransaction().rollback();
             }
         donadorTmp = null;
+        } finally {
+            entityManager.clear();
+            entityManager.close();
+        }
+        return Response.status(200).header("Access-Control-Allow-Origin","*").entity(rta).build();
+ }
+    
+    @PUT
+    @Path("/actualizaproy/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createProyecto(@PathParam("id") Long id, ProyectoDTO proyecto) {
+        JSONObject rta = new JSONObject();
+        Proyecto proyectoTmp = entityManager.find(Proyecto.class, id);
+        proyectoTmp.setNombre(proyecto.getNombre());
+        proyectoTmp.setDescripcion(proyecto.getDescripcion());
+        proyectoTmp.setValorActual(proyecto.getValorActual());
+        proyectoTmp.setTipoProyecto(proyecto.getTipoProyecto());
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.merge(proyectoTmp);
+            entityManager.persist(proyectoTmp);
+            entityManager.getTransaction().commit();
+            entityManager.refresh(proyectoTmp);
+            rta.put("proyecto_nombre", proyectoTmp.getNombre());
+            rta.put("proyecto_descripcion", proyectoTmp.getDescripcion());
+            rta.put("proyecto_valor_actual", proyectoTmp.getValorActual());
+            rta.put("proyecto_tipo_proyecto", proyectoTmp.getTipoProyecto());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        proyectoTmp = null;
         } finally {
             entityManager.clear();
             entityManager.close();

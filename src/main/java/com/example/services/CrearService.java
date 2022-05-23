@@ -9,6 +9,8 @@ import com.example.models.Donante;
 import com.example.models.DonanteDTO;
 import com.example.models.Emprendedor;
 import com.example.models.EmprendedorDTO;
+import com.example.models.Proyecto;
+import com.example.models.ProyectoDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -106,5 +108,37 @@ public class CrearService {
         return Response.status(200).header("Access-Control-Allow-Origin","*").entity(rta).build();
  }
     
+    @POST
+    @Path("/agregarproy")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createProyecto(ProyectoDTO proyecto) {
+        JSONObject rta = new JSONObject();
+        Proyecto proyectoTmp = new Proyecto();
+        proyectoTmp.setNombre(proyecto.getNombre());
+        proyectoTmp.setResponsable(proyecto.getResponsable());
+        proyectoTmp.setDescripcion(proyecto.getDescripcion());
+        proyectoTmp.setFinaldate(proyecto.getFinaldate());
+        proyectoTmp.setValorObjetivo(proyecto.getValorObjetivo());
+        proyectoTmp.setValorActual(proyecto.getValorActual());
+        proyectoTmp.setTipoProyecto(proyecto.getTipoProyecto());
+        proyectoTmp.setEstado(proyecto.getEstado());
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(proyectoTmp);
+            entityManager.getTransaction().commit();
+            entityManager.refresh(proyectoTmp);
+            rta.put("proyecto_id", proyectoTmp.getId());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        proyectoTmp = null;
+        } finally {
+            entityManager.clear();
+            entityManager.close();
+        }
+        return Response.status(200).header("Access-Control-Allow-Origin","*").entity(rta).build();
+ }
     
 }

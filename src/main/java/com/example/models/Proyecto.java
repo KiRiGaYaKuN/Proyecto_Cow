@@ -38,6 +38,7 @@ public class Proyecto implements Serializable{
     @NotNull
     @Column(name = "finaldate", updatable = false)
     @Temporal(TemporalType.DATE)
+    
     private Calendar finaldate;
     
     private String nombre;    
@@ -45,15 +46,66 @@ public class Proyecto implements Serializable{
     private String descripcion;
     
     private Long responsable;
+    
+    private int valorObjetivo;
+    
+    private int ValorActual;
+    
+    private String tipoProyecto;
+    
+    private Long donante;
+    
+    private String estado;
 
     public Proyecto() {
     }
 
     @PrePersist
     private void creationTimestamp() {
-    this.finaldate = Calendar.getInstance();
+    this.iniciodate = Calendar.getInstance();
+    }    
+
+    public int getValorObjetivo() {
+        return valorObjetivo;
     }
 
+    public void setValorObjetivo(int valorObjetivo) {
+        this.valorObjetivo = valorObjetivo;
+    }
+
+    public int getValorActual() {
+        return ValorActual;
+    }
+
+    public void setValorActual(int ValorActual) {
+        this.ValorActual = ValorActual;
+    }
+
+    public String getTipoProyecto() {
+        return tipoProyecto;
+    }
+
+    public void setTipoProyecto(String tipoProyecto) {
+        this.tipoProyecto = tipoProyecto;
+    }
+
+    public Long getDonante() {
+        return donante;
+    }
+
+    public void setDonante(Long donante) {
+        this.donante = donante;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
     public Long getId() {
         return id;
     }

@@ -9,6 +9,7 @@ import com.example.models.Donante;
 import com.example.models.DonanteDTO;
 import com.example.models.Emprendedor;
 import com.example.models.EmprendedorDTO;
+import com.example.models.Proyecto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -71,5 +72,16 @@ public class ConsultaService {
         return Response.status(200).header("Access-Control-Allow-Origin","*").entity(donante).build();
     }
     
+    @GET
+    @Path("/proyecto/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verproy(@PathParam("id") Long id){
+//        Query q = entityManager.createQuery("select u from Emprendedor u order by u.nombre ASC");
+//        List<Emprendedor> emprendedor = q.getResultList();
+        TypedQuery<Proyecto>query =(TypedQuery<Proyecto>)
+            entityManager.createQuery("SELECT c.nombre, c.descripcion, c.iniciodate, c.finaldate, c.ValorActual, c.valorObjetivo, c.tipoProyecto, c.estado FROM Proyecto c"+" WHERE c.id = :id");
+            List<Proyecto>proyecto =query.setParameter("id", id).getResultList();        
+        return Response.status(200).header("Access-Control-Allow-Origin","*").entity(proyecto).build();
+    }
         
 }
