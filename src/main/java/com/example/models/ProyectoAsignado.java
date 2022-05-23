@@ -36,12 +36,16 @@ public class ProyectoAsignado implements Serializable{
     
     private Long idpostulante;
     private Long idproyecto;    
-    private String estado;
     private int valor;
 
     public ProyectoAsignado() {
     }
 
+    @PrePersist
+    private void creationTimestamp() {
+    this.fecha = Calendar.getInstance();
+    }  
+    
     public Long getId() {
         return id;
     }
@@ -64,14 +68,6 @@ public class ProyectoAsignado implements Serializable{
 
     public void setIdproyecto(Long idproyecto) {
         this.idproyecto = idproyecto;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     public int getValor() {

@@ -53,15 +53,27 @@ public class Proyectoservice {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createProyecto(@PathParam("id") Long id, ProyectoDTO proyecto) {
         JSONObject rta = new JSONObject();
+        ProyectoAsignado proyectoATmp = new ProyectoAsignado();
         Proyecto proyectoTmp = entityManager.find(Proyecto.class, id);
         proyectoTmp.setDonante(proyecto.getDonante());
         proyectoTmp.setValorActual(proyectoTmp.getValorActual() + proyecto.getValorActual());
+        
+        proyectoATmp.setIdpostulante(proyecto.getDonante());
+        proyectoATmp.setIdproyecto(proyectoTmp.getId());
+        proyectoATmp.setValor(proyecto.getValorActual());
         try {
             entityManager.getTransaction().begin();
             entityManager.merge(proyectoTmp);
             entityManager.persist(proyectoTmp);
             entityManager.getTransaction().commit();
             entityManager.refresh(proyectoTmp);
+            
+            entityManager.clear();
+            
+            entityManager.getTransaction().begin();
+            entityManager.persist(proyectoATmp);
+            entityManager.getTransaction().commit();
+            entityManager.refresh(proyectoATmp);
             rta.put("donador_id", proyectoTmp.getDonante());
             rta.put("valor_actual", proyectoTmp.getValorActual());
         } catch (Throwable t) {
