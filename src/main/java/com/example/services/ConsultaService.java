@@ -83,5 +83,14 @@ public class ConsultaService {
             List<Proyecto>proyecto =query.setParameter("id", id).getResultList();        
         return Response.status(200).header("Access-Control-Allow-Origin","*").entity(proyecto).build();
     }
+    
+     public String veremprendedor1(String cedula){
+//        Query q = entityManager.createQuery("select u from Emprendedor u order by u.nombre ASC");
+//        List<Emprendedor> emprendedor = q.getResultList();
+        TypedQuery<Emprendedor>query =(TypedQuery<Emprendedor>)
+            entityManager.createQuery("SELECT c.nombre, c.correo, c.cedula FROM Emprendedor c"+" WHERE c.cedula = :cedula");
+            List<Emprendedor>emprendedor =query.setParameter("id", cedula).getResultList();        
+        return emprendedor.get(0).getClave();
+    }
         
 }

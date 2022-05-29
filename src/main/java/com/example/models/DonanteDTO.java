@@ -20,7 +20,12 @@ public class DonanteDTO {
     
     private String clave;
 
-    public DonanteDTO() {
+    public DonanteDTO(String nombre, String correo, int cedula, String tipoProyecto, String clave) {
+        this.nombre=nombre;
+        this.correo=correo;
+        this.cedula=cedula;
+        this.tipoProyecto=tipoProyecto;
+        this.clave=clave;
     }
 
     public String getNombre() {

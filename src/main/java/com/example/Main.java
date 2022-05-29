@@ -25,7 +25,7 @@ public class Main {
 
         Server server = new Server(Integer.valueOf(webPort));
         WebAppContext root = new WebAppContext();
-        root.setContextPath("/");
+        root.setContextPath("/index.html");
         root.setDescriptor(webappDirLocation + "/WEB-INF/web.xml");
         root.setResourceBase(webappDirLocation);
         PersistenceManager.getInstance().getEntityManagerFactory();
